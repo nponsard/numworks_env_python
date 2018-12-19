@@ -1,12 +1,15 @@
 import pygame
 import math
+import threading
+import time
+from pygame import gfxdraw
+
 
 pygame.init()
+# pygame.display.init()
 screen = pygame.display.set_mode((320, 240))
 pygame.display.set_caption("kandinsky screen")
-usable = pygame.surface.Surface((320, 222))
-pygame.draw.rect(usable, (255, 255, 255), (0, 0, 320, 222))
-screen.blit(usable, (0, 18))
+pygame.draw.rect(screen, (255, 255, 255), (0, 18, 320, 222))
 pygame.draw.rect(screen, (255, 183, 52), (0, 0, 320, 18))
 
 pygame.display.flip()
@@ -15,9 +18,21 @@ pygame.display.flip()
 font = pygame.font.Font("SourceCodeVariable-Roman.ttf", 8)
 
 
-def render():
-    screen.blit(usable, (0, 18))
-    pygame.display.flip()
+class flip(threading.Thread):
+    r = 1
+
+    def run(self):
+        while self.r:
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    self.r = 0
+            pygame.display.flip()
+            time.sleep(0.05)
+
+
+f = flip()
+
+f.start()
 
 
 def color(r, g, b):
@@ -28,8 +43,9 @@ def set_pixel(x, y, color):
     red = (color // 2048)*8
     green = (color - (red * 2048 // 8)) // 32 * 4
     blue = (color - (red * 2048 // 8) - (green * 32 // 4))*8
-    pygame.draw.rect(usable, (red, green, blue), pygame.rect.Rect(x, y, 1, 1))
-    render()
+    screen.set_at((x, y+18), (red, green, blue))
+    #gfxdraw.pixel(screen, x, y+18, (red, green, blue))
+    #pygame.draw.rect(usable, (red, green, blue), pygame.rect.Rect(x, y, 1, 1))
 
 
 def draw_string(text, x, y):
@@ -38,8 +54,8 @@ def draw_string(text, x, y):
 
 
 def get_pixel(x, y):
-    pxarray = pygame.PixelArray(usable)
-    w = hex(pxarray[x, y])
+    pxarray = pygame.PixelArray(screen)
+    w = hex(pxarray[x, y+18])
     red = w[2] + w[3]
     green = w[4] + w[5]
     blue = w[6] + w[7]

@@ -1,2 +1,6 @@
 
 releases/
+
+mandelbrot\.py
+
+__pycache__/
