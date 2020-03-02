@@ -51,8 +51,8 @@ def set_pixel(x, y, color):
     #pygame.draw.rect(usable, (red, green, blue), pygame.rect.Rect(x, y, 1, 1))
 
 
-def draw_string(text, x, y):
-    screen.blit(font.render(text, True, (0, 0, 0)), (x*scale, (y+18)*scale))
+def draw_string(text, x, y, textcolor = (0, 0, 0), backgroundcolor = (255,255,255)):
+    screen.blit(font.render(text, True, textcolor, backgroundcolor), (x*scale, (y+18)*scale))
     pygame.display.flip()
 
 
