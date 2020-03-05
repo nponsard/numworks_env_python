@@ -39,16 +39,23 @@ f.start()
 
 
 def color(r, g, b):
-    return b // 8 + g // 4 * 2**5 + r // 8 * 2**11
+    return (r, g, b)
 
 
 def set_pixel(x, y, color):
-    red = (color // 2048)*8
-    green = (color - (red * 2048 // 8)) // 32 * 4
-    blue = (color - (red * 2048 // 8) - (green * 32 // 4))*8
-    screen.set_at((x*scale, (y+18)*scale), (red, green, blue))
+    red = color[0]
+    green = color[1]
+    blue = color[2]
+
+    #screen.set_at((x*scale, (y+18)*scale), (red, green, blue))
+    pygame.draw.rect(screen, (red, green, blue),
+                     pygame.rect.Rect(x*scale, (y+18)*scale, scale, scale))
     #gfxdraw.pixel(screen, x, y+18, (red, green, blue))
-    #pygame.draw.rect(usable, (red, green, blue), pygame.rect.Rect(x, y, 1, 1))
+
+
+def fill_rect(x, y, width, height, color):
+    pygame.draw.rect(screen, color,
+                     pygame.rect.Rect(x*scale, (y+18)*scale, width*scale, height * scale))
 
 
 def draw_string(text, x, y):
@@ -57,12 +64,11 @@ def draw_string(text, x, y):
 
 
 def get_pixel(x, y):
-    pxarray = pygame.PixelArray(screen)
-    w = hex(pxarray[x*scale, (y+18)*scale])
-    red = w[2] + w[3]
-    green = w[4] + w[5]
-    blue = w[6] + w[7]
-    blue = int(blue, 16)//8
-    green = int(green, 16)//4*2**5
-    red = int(red, 16)//8*2**11
-    return red + green + blue
+    w = screen.get_at((x*scale, (y+18)*scale))
+
+    print(w)
+    print(len(w))
+    red = w[0]
+    green = w[1]
+    blue = w[2]
+    return (red, green, blue)
