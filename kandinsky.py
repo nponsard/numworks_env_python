@@ -58,8 +58,9 @@ def fill_rect(x, y, width, height, color):
                      pygame.rect.Rect(x*scale, (y+18)*scale, width*scale, height * scale))
 
 
-def draw_string(text, x, y):
-    screen.blit(font.render(text, True, (0, 0, 0)), (x*scale, (y+18)*scale))
+def draw_string(text, x, y, color1=(0, 0, 0), color2=(255, 255, 255)):
+    screen.blit(font.render(text, True, color1, background=color2),
+                (x*scale, (y+18)*scale))
     pygame.display.flip()
 
 
